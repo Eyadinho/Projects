@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getCryptoData } from '../api/coinGecko';
-import './CryptoTracker.css';
+import { getCryptoData } from '../api/coinAPI';
+import './Tracker.css';
 
 const CryptoTracker = () => {
   const [cryptos, setCryptos] = useState([]);
