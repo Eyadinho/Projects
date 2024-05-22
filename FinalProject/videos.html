@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Video Gallery</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+		video {
+			width: 640px;
+			height: 360px;
+		}
+		footer {
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+		}
+
+		.button-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 50px auto;
+			max-width: 800px;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+		}
+
+		button {
+			margin: 20px;
+			padding: 15px 40px;
+			border-radius: 10px;
+			background-color: #0074D9;
+			color: #FFF;
+			font-size: 24px;
+			border: none;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		button:hover {
+			background-color: #1A5276;
+		}
+	</style>
+	<header>
+	<nav>
+		<div class="logo-container">
+			<img src="logo1.png" alt="Car Detailing Logo">
+			<h1> Image Gallery </h1>
+		</div>
+		<ul>
+			<li><a href="Home.html">Home</a></li>
+			<li><a href="services.html">Services</a></li>
+			<li><a href="gallery.html">Gallery</a></li>
+			<li><a href="reviews.html">Reviews</a></li>
+			<li><a href="contact.html">Contact</a></li>
+			<li><a href="specialoffers.html">Special Offers</a></li>
+			<li><a href="pricing.html">Prices</a></li>
+			<li><a href="reservations.html">Reservations</a></li>
+		</ul>
+	</nav>
+</header>
+	<script>
+		var videos = ["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4", "video6.mp4", "video7.mp4", "video8.mp4", "video9.mp4", "video10.mp4"];
+		var index = 0;
+		
+
+		function loadNextVideo() {
+			index = (index + 1) % videos.length;
+			document.getElementById("gallery-video").src = videos[index];
+			document.getElementById("gallery-video").play();
+		}
+
+		window.addEventListener("load", function() {
+			document.getElementById("gallery-video").addEventListener("ended", loadNextVideo, false);
+		}, false);
+		document.getElementById("gallery-video").autoplay = true;
+	</script>
+</head>
+<body>
+	
+	<video id="gallery-video" src="video1.mp4" autoplay muted controls></video>
+	<button class= "go-to-images" onclick="location.href='images.html'"> Go to Image Gallery</button>
+</body>
+</html>
+
+
+

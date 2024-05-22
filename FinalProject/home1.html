@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>homepage</title>
+	<style>
+		body {
+			background-image: url('logo1.png');
+			background-size: cover;
+			background-position: center center;
+			animation: animatedBackground 20s ease-in-out infinite;
+			animation-delay: 2s;
+		}
+
+		@keyframes animatedBackground {
+			0% { background-position: 0 0; }
+			50% { background-position: 100% 100%; }
+			100% { background-position: 0 0; }
+		}
+
+		button {
+			display: block;
+			margin: 0 auto;
+			font-size: 24px;
+			padding: 10px 20px;
+			border-radius: 5px;
+			background-color: #4CAF50;
+			color: white;
+			cursor: pointer;
+			border: none;
+		}
+	</style>
+</head>
+<body>
+	<button onclick="window.location.href='home.html'">Click here to get your car cleaned!!!</button>
+</body>
+</html>

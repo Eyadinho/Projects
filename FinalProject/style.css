@@ -1,0 +1,174 @@
+/* Body styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  
+}
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.cart-icon {
+  color: #fff;
+  background-color: #f00;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.cart-count {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+#carousel img:not(:first-child) {
+  display: none;
+}
+
+#carousel img {
+  transition: opacity 1s ease-in-out;
+}
+
+#carousel img.active {
+  display: block;
+  opacity: 1;
+}
+
+#carousel img:not(.active) {
+  opacity: 0;
+}
+
+
+
+
+
+/* Header styles */
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  height: 350px;
+  width:350px;
+  margin-right: 10px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav li {
+  margin-left: 10px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Main styles */
+main {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 36px;
+  margin-top: 40px;
+}
+
+h2 {
+  font-size: 28px;
+  margin-top: 30px;
+}
+
+.discount-coupons ul,
+.special-offers ul {
+  list-style: none;
+  padding: 0;
+}
+
+.discount-coupons li,
+.special-offers li {
+  margin-bottom: 20px;
+}
+
+.discount-coupons p,
+.special-offers p {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.discount-coupons p:first-of-type,
+.special-offers p:first-of-type {
+  font-weight: bold;
+}
+
+.discount-coupons p:last-of-type,
+.special-offers p:last-of-type {
+  margin-top: 5px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Footer styles */
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  margin-top: auto;
+  position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+
+}
+.service-card img {
+    opacity: 0.6;
+    transition: opacity 0.5s;
+}
+
+.service-card img:hover {
+    opacity: 1;
+}

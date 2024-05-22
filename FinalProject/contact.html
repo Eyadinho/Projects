@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Car Detailing - Contact Us</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+	footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+} </style>
+	<script>
+		function showMessage() {
+			alert("Thank you for contacting us! We'll get back to you within 24 hours.");
+		}
+	</script>
+</head>
+<body>
+	<header>
+		<nav>
+			<div class="logo-container">
+				<img src="logo1.png" alt="Car Detailing Logo">
+				<h1>Contact US</h1>
+			</div>
+			<ul>
+				<li><a href="Home.html">Home</a></li>
+				<li><a href="services.html">Services</a></li>
+				<li><a href="gallery.html">Gallery</a></li>
+				<li><a href="reviews.html">Reviews</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="specialoffers.html">SpecialOffers</a></li>
+				<li><a href="pricing.html">Prices</a></li>
+				<li><a href="reservations.html">reservations</a></li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main>
+		
+		
+		<section class="contact-info">
+			<h2>Business Hours</h2>
+			<p>Monday - Friday: 8am - 6pm</p>
+			<p>Saturday: 9am - 4pm</p>
+			<p>Sunday: Closed</p>
+			
+			<h2>Location</h2>
+			<p>123 Main St.</p>
+			<p>Anytown, USA 12345</p>
+			
+			<h2>Contact Information</h2>
+			<p>Phone: 555-1234</p>
+			<p>Email: info@cardetailing.com</p>
+		</section>
+		
+		<section class="contact-form">
+			<form onsubmit="showMessage()">
+				<label for="name">Name</label>
+				<input type="text" id="name" name="name" required>
+				
+				<label for="email">Email</label>
+				<input type="email" id="email" name="email" required>
+				
+				<label for="message">Message</label>
+				<textarea id="message" name="message" required></textarea>
+				<button type="submit">Send Message</button>
+			</form>
+		</section>
+	</main>
+	
+	
+	
+</body>
+</html>
