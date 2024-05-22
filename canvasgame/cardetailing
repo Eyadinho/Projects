@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pharaoh Car Wash</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="services.html">Services</a></li>
+				<li><a href="gallery.html">Gallery</a></li>
+				<li><a href="contact.html">Contact Us</a></li>
+				<li><a href="reservation.html">Reservation</a></li>
+				<li><a href="reviews.html">Reviews</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<section id="home">
+			<div class="hero">
+				<h1>Pharaoh Car Wash</h1>
+				<p>Get your car the royal treatment.</p>
+				<a href="services.html" class="btn">View Services</a>
+			</div>
+		</section>
+	</main>
+
+	<footer>
+		<p>&copy; 2023 Pharaoh Car Wash. All rights reserved.</p>
+	</footer>
+</body>
+</html>

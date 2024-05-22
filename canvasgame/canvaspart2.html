@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Cannon Game</title>
+    <style type="text/css">
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+	<script>
+      var canvas;
+      var context;
+      var TARGET_PIECES = 7;
+      var MISS_PENALTY = 2;
+      var HIT_REWARD = 3;
+      var TIME_INTERVAL = 25;
+      var intervalTimer;
+      var timercount;
+      var timeLeft;
+      var shotsFired;
+      var timeElapsed;
+      var blocker;
+      var blockerDistance;
+      var blockerBeginning;
+      var blockerEnd;
+      var initialBlockerVelocity;
+      var blockerVelocity;
+      var target;
+      var targetDistance;
+      var targetBeginning;
+      var targetEnd;
+      var pieceLength;
+      var initialTargetVelocity;
+      var TargetVelocity;
+      var lineWidth;
+      var hitStates;
+      var targetPiecesHit;
+      var cannonball;
+      var cannonballVelocity;
+      var cannonballOnScreen;
+      var cannonballRadius;
+      var cannonballSpeed;
+      var cannonBaseRadius;
+      var cannonLength;
+      var barrelEnd;
+      var canvasWidth;
+      var canvasHeight;
+      var targetSound;
+      var cannonSound;
+      var blockerSound;
+	  
+      // setup Game Function
+      function setupGame() {
+        document.addEventListener("unload", stopTimer, false);
+        canvas = document.getElementById("theCanvas");
+        context = canvas.getContext("2d");
+        // starting a new game when start game
+        document
+          .getElementById("startButton")
+          .addEventListener("click", newGame, false);
+        //representation of the game items
+        blocker = new Object();
+        blocker.start = new Object();
+        blocker.end = new Object();
+        target = new Object();
+        target.start = new Object();
+        target.end = new Object();
+        cannonball = new Object();
+        barrelEnd = new Object();
+        // hitStates as an array
+
+        hitStates = new Array(TARGET_PIECES);
+        // getting the sounds
+        targetSound = document.getElementById("targetSound");
+        cannonSound = document.getElementById("cannonSound");
+        blockerSound = document.getElementById("blockerSound");
+      } // end of the game Function
+      // Function Start Timer
+      function startTimer()
+	  {
+        canvas.addEventListener("click", fireCannonball, false);
+        intervalTimer = window.setInterval(updatePositions, TIME_INTERVAL);
+      } // end of start timer function
+      // terminating the interval timer
+      function stopTimer() {
+        canvas.removeEventListener("click", fireCannonball, false);
+        window.clearInterval(intervalTimer);
+      } // end of the stop timer function
+      // resetElement Function
+      function resetElement() {
+        var w = canvas.width;
+        var h = canvas.height;
+        canvasWidth = w;
+        canvasHeight = h;
+        cannonBaseRadius = h / 18;
+        cannonLength = w / 8;
+        cannonballRadius = w / 36;
+        cannonballSpeed = (w * 3) / 2;
+        lineWidth = w / 24;
+
+        blockerDistance = (w * 5) / 8;
+        blockerBeginning = h / 8;
+        blockerEnd = (h * 3) / 8;
+        initialBlockerVelocity = h / 2;
+        blocker.start.x = blockerDistance;
+        blocker.start.y = blockerBeginning;
+        blocker.end.x = blockerDistance;
+        blocker.end.y = blockerEnd;
+        // configuring instance variables related to the target
+        targetDistance = (w * 7) / 8;
+        targetBeginning = h / 8;
+        targetEnd = (h * 7) / 8;
+        pieceLength = (targetEnd - targetBeginning) / TARGET_PIECES;
+        initialTargetVelocity = -h / 4;
+        target.start.x = targetDistance;
+        target.start.y = targetBeginning;
+        target.end.x = targetDistance;
+        target.end.y = targetEnd;
+
+        barrelEnd.x = cannonLength;
+        barrelEnd.y = h / 2;
+      } // end of the function
+      function newGame() {
+        // start of new game function
+        resetElement();
+        stopTimer();
+        for (var i = 0; i < TARGET_PIECES; ++i) hitStates[i] = false;
+        targetPiecesHit = 0;
+        blockerVelocity = initialBlockerVelocity;
+        TargetVelocity = initialTargetVelocity;
+        timeLeft = 10;
+        timercount = 0;
+        cannonballOnScreen = false;
+        shotsFired = 0;
+        timeElapsed = 0;
+        startTimer();
+      } // end of the function
+      function updatePositions() {
+        // function start
+        var blockerUpdate = (TIME_INTERVAL / 1000.0) * blockerVelocity;
+        blocker.start.y += blockerUpdate;
+        blocker.end.y += blockerUpdate;
+        var targetUpdate = (TIME_INTERVAL / 1000.0) * TargetVelocity;
+        target.start.y += targetUpdate;
+        target.end.y += targetUpdate;
+
+        if (blocker.start.y < 0 || blocker.end.y > canvasHeight)
+          blockerVelocity *= -1;
+
+        if (target.start.y < 0 || target.end.y > canvasHeight)
+          TargetVelocity *= -1;
+        if (cannonballOnScreen) {
+          var interval = TIME_INTERVAL / 1000.0;
+          cannonball.x += interval * cannonballVelocityX;
+          cannonball.y += interval * cannonballVelocityY;
+          if (
+            cannonballVelocityX > 0 &&
+            cannonball.x + cannonballRadius >= blockerDistance &&
+            cannonball.x + cannonballRadius <= blockerDistance + lineWidth &&
+            cannonball.y - cannonballRadius > blocker.start.y &&
+            cannonball.y + cannonballRadius < blocker.end.y
+          ) {
+            blockerSound.play();
+            cannonballVelocityX *= -1;
+            timeLeft -= MISS_PENALTY;
+          } else if (
+            cannonball.x + cannonballRadius > canvasWidth ||
+            cannonball.x - cannonballRadius < 0
+          ) {
+            cannonballOnScreen = false;
+          } // end else if
+          else if (
+            cannonball.y + cannonballRadius > canvasHeight ||
+            cannonball.y - cannonballRadius < 0
+          ) {
+            cannonballOnScreen = false;
+          } else if (
+            cannonballVelocityX > 0 &&
+            cannonball.x + cannonballRadius >= targetDistance &&
+            cannonball.x + cannonballRadius <= targetDistance + lineWidth &&
+            cannonball.y - cannonballRadius > target.start.y &&
+            cannonball.y + cannonballRadius < target.end.y
+          ) {
+            var section = Math.floor(
+              (cannonball.y - target.start.y) / pieceLength
+            );
+            if (
+              section >= 0 &&
+              section < TARGET_PIECES &&
+              !hitStates[section]
+            ) {
+              targetSound.play();
+              hitStates[section] = true;
+              cannonballOnScreen = false;
+              timeLeft += HIT_REWARD;
+              if (++targetPiecesHit == TARGET_PIECES) {
+                stopTimer();
+                draw();
+                showGameOverDialog("YOU WON!");
+              }
+            }
+          }
+        }
+        ++timercount;
+        if (TIME_INTERVAL * timercount >= 1000) {
+          --timeLeft;
+          ++timeElapsed;
+          timercount = 0;
+        }
+        draw();
+        if (timeLeft <= 0) {
+          stopTimer();
+          showGameOverDialog("You lost");
+        }
+      } //end function update position
+      function fireCannonball(event) {
+        if (cannonballOnScreen) return;
+        var angle = alignCannon(event);
+        cannonball.x = cannonballRadius;
+        cannonball.y = canvasHeight / 2;
+
+        cannonballVelocityX = (cannonballSpeed * Math.sin(angle)).toFixed(0);
+
+        cannonballVelocityY = (-cannonballSpeed * Math.cos(angle)).toFixed(0);
+        cannonballOnScreen = true;
+        ++shotsFired;
+
+        cannonSound.play();
+      }
+      function alignCannon(event) {
+        var clickPoint = new Object();
+        clickPoint.x = event.x;
+        clickPoint.y = event.y;
+
+        var centerMinusY = canvasHeight / 2 - clickPoint.y;
+        var angle = 0;
+        if (centerMinusY !== 0) angle = Math.atan(clickPoint.x / centerMinusY);
+        if (clickPoint.y > canvasHeight / 2)
+            angle += Math.PI;
+        barrelEnd.x = (cannonLength * Math.sin(angle)).toFixed(0);
+        barrelEnd.y = (
+          -cannonLength * Math.cos(angle) +
+          canvasHeight / 2
+        ).toFixed(0);
+        return angle;
+      }
+      function draw() {
+        canvas.width = canvas.width; // clearing the canvas
+        // display the remaining time
+        context.fillStyle = "black";
+        context.font = "bold 24px serif";
+        context.textBaseline = "top";
+        context.fillText("Time remaining: " + timeLeft, 5, 5);
+
+        if (cannonballOnScreen) {
+          context.fillStyle = "gray";
+          context.beginPath();
+          context.arc(
+            cannonball.x,
+            cannonball.y,
+            cannonballRadius,
+            0,
+            Math.PI * 2
+          );
+          context.closePath();
+          context.fill();
+        }
+        // drawing the cannon barrel
+        context.beginPath();
+        context.strokeStyle = "black";
+        context.moveTo(0, canvasHeight / 2);
+        context.lineTo(barrelEnd.x, barrelEnd.y);
+        context.lineWidth = lineWidth;
+        context.stroke();
+        // drawing the cannon base
+        context.beginPath();
+        context.fillStyle = "gray";
+        context.arc(0, canvasHeight / 2, cannonBaseRadius, 0, Math.PI * 2);
+        context.closePath();
+        context.fill();
+        // draw the blocker
+        context.beginPath();
+        context.moveTo(blocker.start.x, blocker.start.y);
+        context.lineTo(blocker.end.x, blocker.end.y);
+        context.lineWidth = lineWidth;
+        context.stroke();
+        var currentPoint = new Object();
+        currentPoint.x = target.start.x;
+        currentPoint.y = target.start.y;
+        for (var i = 0; i < TARGET_PIECES; ++i) {
+          if (!hitStates[i]) {
+            context.beginPath();
+
+            if (i % 2 === 0) context.strokeStyle = "yellow";
+            else context.strokeStyle = "blue";
+
+            context.moveTo(currentPoint.x, currentPoint.y);
+            context.lineTo(currentPoint.x, currentPoint.y + pieceLength);
+            context.lineWidth = lineWidth;
+            context.stroke();
+          }
+          currentPoint.y += pieceLength;
+        }
+      }
+      // when the game ends message
+      function showGameOverDialog(message) {
+        alert(
+          message +
+            " \nShots fired: " +
+            shotsFired +
+            "\nTotal time: " +
+            timeElapsed +
+            " seconds "
+        );
+      }
+      window.addEventListener("load", setupGame, false);
+    </script>
+  </head>
+  <body>
+    <audio id="blockersound" preload="auto">
+      <source src="blocker_hit.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="targetSound" preload="auto">
+      <source src="target_hit.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="cannonSound" preload="auto">
+      <source src="cannon_fire.mp3" type="audio/mpeg" />
+    </audio>
+    <canvas id="theCanvas" width="480" height="600"></canvas>
+    <p><input id="startButton" type="button" value="Start Game" /></p>
+    
+  </body>
+</html>

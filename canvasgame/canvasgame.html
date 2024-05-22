@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cannon Game</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const cannon = {
+        x: canvas.width / 2,
+        y: canvas.height - 20,
+        width: 50,
+        height: 20,
+        speed: 10
+      };
+
+      const bullet = {
+        x: 0,
+        y: 0,
+        radius: 5,
+        speed: 20
+      };
+
+      const target = {
+        x: 50,
+        y: 50,
+        width: 50,
+        height: 50,
+        speedX: 5,
+        speedY: 5
+      };
+
+      const cannonFireSound = new Audio('cannon_fire.mp3');
+      const targetHitSound = new Audio('target_hit.mp3');
+      const blockerHitSound = new Audio('blocker_hit.mp3');
+
+      function drawCannon() {
+        ctx.fillRect(cannon.x, cannon.y, cannon.width, cannon.height);
+      }
+
+      function drawBullet() {
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawTarget() {
+        ctx.fillRect(target.x, target.y, target.width, target.height);
+      }
+
+      document.addEventListener('keydown', function(event) {
+        if (event.code === 'ArrowLeft') {
+          cannon.x -= cannon.speed;
+        } else if (event.code === 'ArrowRight') {
+          cannon.x += cannon.speed;
+        } else if (event.code === 'Space') {
+          bullet.x = cannon.x + cannon.width / 2;
+          bullet.y = cannon.y;
+          cannonFireSound.play();
+        }
+      });
+
+      function update() {
+        if (bullet.y > 0) {
+          bullet.y -= bullet.speed;
+        } else {
+          bullet.x = 0;
+          bullet.y = 0;
+        }
+
+        target.x += target.speedX;
+        target.y += target.speedY;
+
+        if (bullet.x >= target.x && bullet.x <= target.x + target.width &&
+            bullet.y >= target.y && bullet.y <= target.y + target.height) {
+          bullet.x = 0;
+          bullet.y = 0;
+          target.x = 50;
+          target.y = 50;
+          target.speedX = Math.random() * 10;
+          target.speedY = Math.random() * 10;
+          targetHitSound.play();
+        }
+
+        if (target.x + target.width >= canvas.width || target.x <= 0) {
+          target.speedX = -target.speedX;
+          blockerHitSound.play();
+        }
+
+        if (target.y + target.height >= canvas.height || target.y <= 0) {
+          target.speedY = -target.speedY;
+          blockerHitSound.play();
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCannon();
+        drawBullet();
+        drawTarget();
+        update();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+  </body>
+</html>
